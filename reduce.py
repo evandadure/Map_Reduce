@@ -22,7 +22,7 @@ def reduce(big_dicList, index):
     return res
 
 def writeFileJson(small_dic, index):
-    with open('../data/reduce'+str(index)+'.json', 'w') as reduceJson:
+    with open("data/reduce_test_"+str(index)+".json", 'w') as reduceJson:
         json.dump(small_dic, reduceJson)
 
 def execReduce(urls, index):
@@ -30,6 +30,6 @@ def execReduce(urls, index):
     small_dic = reduce(big_dicList, index)
     writeFileJson(small_dic, index)
 
-
-urls = ["../data/file.json", "../data/file copy.json"]
-execReduce(urls, 0)
+#
+# urls = ["../data/file.json", "../data/file copy.json"]
+# execReduce(urls, 0)

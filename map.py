@@ -31,7 +31,7 @@ def map(words_list,reduces_number):
 def write_map_json(map_dict, filepath):
     #ecrit le contenu d'une liste mappée de mots dans un fichier json
     with open(filepath, 'w') as f:
-        f.write(str(map_dict))
+        f.write(str(map_dict).replace("'",'"'))
     f.close()
 
 
