@@ -8,7 +8,8 @@ def map(input_str):
             dict[word]+=1
         else:
             dict[word]=1
-    return(dict)
+    print("MAP : ", dict)
+    return([dict, dict])
 
 
 
