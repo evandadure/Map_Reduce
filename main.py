@@ -4,7 +4,7 @@ import reduce
 if __name__ == "__main__":
     maps_number = 5
     reduces_number = 3
-    text = "salutn a c'Est évan jahaz@salutn @dç sfd!a!quoh dsf !salutn!!:: aa!a salutn,jahaz"
+    text = "salutn a c'Est evan jahaz@salutn @dc sfd!a!quoh dsf !salutn!!:: aa!a salutn,jahaz"
 
 
     #MAP
