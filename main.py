@@ -48,6 +48,6 @@ def delete_files():
 
 if __name__ == "__main__":
     delete_files()
-    mapReduce(4,2)
+    print(mapReduce(4,2))
 
 
