@@ -1,44 +1,53 @@
-import map
-import reduce
+from scheduler import Scheduler
+import time
+import os
+import glob
+
+def mapReduce(nb_maps, nb_reduces):
+    """
+    Creates a Scheduler object to count the occurrences of each different word of a text
+    Also counts the execution time to divide the text in lists of words (t1), and the execution time to run all Maps and
+    Reduces (t2)
+    :param nb_maps: number of Maps used
+    :param nb_reduces: number of Reduces used
+    :return: a list composed of t1 and t2
+    """
+    start_t1 = time.time()
+
+    f = open('data/text2.txt', 'r')
+    text = f.read()
+
+    myScheduler = Scheduler(text, nb_maps, nb_reduces)
+    myScheduler.words_lists = myScheduler.divide()
+
+    end_t1 = time.time()
+    t1 = end_t1-start_t1
+    start_t2 = time.time()
+
+    myScheduler.run_maps()
+    myScheduler.run_reduces()
+    myScheduler.join_reduces()
+
+    end_t2 = time.time()
+    t2 = end_t2-start_t2
+
+    return [t1,t2]
+
+
+
+def delete_files():
+    """
+    Deletes all files of the "data/maps" and "data/reduces" directories
+    """
+    maps = glob.glob('data/maps/*')
+    for map in maps:
+        os.remove(map)
+    reduces = glob.glob('data/reduces/*')
+    for reduce in reduces:
+        os.remove(reduce)
 
 if __name__ == "__main__":
-    maps_number = 5
-    reduces_number = 3
-    text = "salutn a c'Est evan jahaz@salutn @dc sfd!a!quoh dsf !salutn!!:: aa!a salutn,jahaz"
+    delete_files()
+    mapReduce(4,2)
 
 
-    #MAP
-    divided_text = map.divide(text,maps_number)
-    list_map_files = []
-    for i in range(0,maps_number):
-        # map each part of the divided text in a seperate file
-        mapped_list = map.map(divided_text[i],reduces_number)
-        map_path = "data/map_test_"+str(i)+".json"
-        list_map_files.append(map_path)
-        map.write_map_json(mapped_list,map_path)
-
-    #REDUCE
-    for j in range(0,reduces_number):
-        reduce.execReduce(list_map_files,j)
-
-
-
-
-
-    # print(list_dics)
-    # map.map("salutn a c'Est évan jahaz@salutn @dç sfd!a!quoh dsf !salutn!!:: aa!a")
-
-def modulo(input_str, dividing_number):
-    sum_ascii = 0
-    for char in input_str:
-        sum_ascii+=ord(char)
-    return sum_ascii%dividing_number
-
-
-my_str = "hello worlda"
-print(modulo(my_str,2))
-# print(ord(""))
-# my_str_as_bytes = str.encode(my_str)
-# print(my_str_as_bytes) # ensure it is byte representation
-# my_decoded_str = my_str_as_bytes.decode()
-# print(type(my_decoded_str)) # ensure it is string representation
