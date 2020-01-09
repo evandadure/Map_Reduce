@@ -49,8 +49,9 @@ def delete_files():
         os.remove(reduce)
 
 if __name__ == "__main__":
+    #empty the folders "data/maps" and "data/reduces" first
     delete_files()
-    delays = mapReduce(10,4)
+    delays = mapReduce(15,6)
     print("time to divide : "+str(delays[0])+"\ntime to map and reduce : "+str(delays[1]))
 
 
