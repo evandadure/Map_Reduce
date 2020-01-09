@@ -14,11 +14,13 @@ def mapReduce(nb_maps, nb_reduces):
     """
     start_t1 = time.time()
 
-    f = open('data/text2.txt', 'r')
+    f = open('data/text.txt', 'r')
     text = f.read()
 
     myScheduler = Scheduler(text, nb_maps, nb_reduces)
     myScheduler.words_lists = myScheduler.divide()
+    myScheduler.set_map_paths_list()
+    myScheduler.set_reduce_paths_list()
 
     end_t1 = time.time()
     t1 = end_t1-start_t1
@@ -48,6 +50,7 @@ def delete_files():
 
 if __name__ == "__main__":
     delete_files()
-    print(mapReduce(4,2))
+    delays = mapReduce(10,4)
+    print("time to divide : "+str(delays[0])+"\ntime to map and reduce : "+str(delays[1]))
 
 

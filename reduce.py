@@ -1,9 +1,9 @@
 import json
-from threading import Thread
+import multiprocessing
 
-class Reduce(Thread):
+class Reduce(multiprocessing.Process):
 
-    """Thread which creates a reduce file from a list of map files paths"""
+    """Process which creates a reduce file from a list of map files paths"""
 
     def __init__(self, map_paths_list, reduce_index):
         """
@@ -11,7 +11,8 @@ class Reduce(Thread):
         :param map_paths_list: the list of all Maps files paths
         :param reduce_index: index of the current Reduce
         """
-        Thread.__init__(self)
+
+        multiprocessing.Process.__init__(self)
         self.map_paths_list = map_paths_list
         self.reduce_index = reduce_index
         self.word_dicts_list = []
@@ -55,3 +56,5 @@ class Reduce(Thread):
         current_dict = self.reduce()
         self.reduce_path = "data/reduces/reduce_json_" + str(self.reduce_index) + ".json"
         self.write_reduce_json(current_dict)
+
+        print("reduce_json_" + str(self.reduce_index) + ".json has been created.")

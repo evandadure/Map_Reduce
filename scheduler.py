@@ -3,16 +3,17 @@ import json
 from map import Map
 from reduce import Reduce
 
+
 class Scheduler():
 
-    """The Scheduler class allows the user to create a multi-threads Map-Reduce program"""
+    """The Scheduler class allows the user to create a multi-processes Map-Reduce program"""
 
     def __init__(self, text, nb_maps, nb_reduces):
         """
         Constructor of a Scheduler object
         :param text: the original text (String)
-        :param nb_maps: number of Maps used (threads)
-        :param nb_reduces: number of Reduces used (threads)
+        :param nb_maps: number of Maps used (processes)
+        :param nb_reduces: number of Reduces used (processes)
         """
         self.text = text
         self.nb_maps = nb_maps
@@ -30,9 +31,21 @@ class Scheduler():
         main_words_list = [word.casefold() for word in re.findall(r'\w+', self.text)]
         return [main_words_list[i::self.nb_maps] for i in range(self.nb_maps)]
 
+    def set_map_paths_list(self):
+        """
+        Sets the map paths list, which will be later used by the Reduces
+        """
+        self.map_paths_list = ["data/maps/map_json_" + str(i) + ".json" for i in range(self.nb_maps)]
+
+    def set_reduce_paths_list(self):
+        """
+        Sets the reduce paths list, which will be later used to concatenate the content of each reduce
+        """
+        self.reduce_paths_list = ["data/reduces/reduce_json_" + str(i) + ".json" for i in range(self.nb_reduces)]
+
     def run_maps(self):
         """
-        Creates multiple Maps and executes the run() method of each Map in parallel with the Thread methods
+        Creates multiple Maps and executes the run() method of each Map in parallel with the Process methods
         Also adds each Map file path in a list of Map file paths
         """
         maps = [Map(self.words_lists[i], self.nb_reduces, i) for i in range(self.nb_maps)]
@@ -42,11 +55,11 @@ class Scheduler():
         for map in maps:
             # waits until the run() method of each Map has been fully executed
             map.join()
-            self.map_paths_list.append(map.map_path)
+
 
     def run_reduces(self):
         """
-        Creates multiple Reduces and executes the run() method of each Reduce in parallel with the Thread methods
+        Creates multiple Reduces and executes the run() method of each Reduce in parallel with the Process methods
         Also adds each Reduce file path in a list of Reduce file paths
         """
         reduces = [Reduce(self.map_paths_list, i) for i in range(self.nb_reduces)]
@@ -56,7 +69,6 @@ class Scheduler():
         for reduce in reduces:
             # waits until the run() method of each Reduce has been fully executed
             reduce.join()
-            self.reduce_paths_list.append(reduce.reduce_path)
 
     def join_reduces(self):
         """
