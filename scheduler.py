@@ -2,6 +2,8 @@ import re
 import json
 from map import Map
 from reduce import Reduce
+import os
+import time
 
 
 class Scheduler():
@@ -55,6 +57,9 @@ class Scheduler():
         for map in maps:
             # waits until the run() method of each Map has been fully executed
             map.join()
+        while(sum([len(files) for r, d, files in os.walk("data/maps")]) != len(maps)):
+            time.sleep(0.005)
+
 
 
     def run_reduces(self):

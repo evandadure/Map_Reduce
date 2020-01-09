@@ -1,6 +1,5 @@
-f = open('data/text.txt', 'r')
-text = f.read()
+import os
 
-with open('data/text.txt', 'w') as f:
-    f.write(text+text)
-f.close()
+cpt = sum([len(files) for r, d, files in os.walk("data/maps")])
+
+print(cpt)
